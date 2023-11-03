@@ -1,0 +1,28 @@
+import socket
+import struct 
+
+numero1 = int(input("Digite o primeiro número: "))
+numero2 = int(input("Digite o segundo número: "))
+operacao = input("Digite a operação (+, -, *, /): ")
+
+socket_cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+IP_PORTA = ("127.0.0.1", 5000)
+
+dados = struct.pack('iiis', numero1, numero2, operacao.encode())
+
+socket_cliente.connect(IP_PORTA)
+
+socket_cliente.send(dados)
+
+print("Dados enviados!")
+
+resposta= struct.unpack('f', socket_cliente.recv(1024))[0]
+
+print(f"Resposta do servidor: {resposta}")
+
+socket_cliente.close()
+
+
+
+socket_cliente.close()
