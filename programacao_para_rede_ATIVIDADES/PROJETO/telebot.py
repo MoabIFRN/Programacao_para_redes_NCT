@@ -1,13 +1,13 @@
 import telebot
 import requests
 
-TOKEN = 'SEU_TOKEN_AQUI'
+TOKEN = ''
 
 bot = telebot.TeleBot(TOKEN)
 
 # Função para obter informações sobre o clima usando a API OpenWeatherMap
 def obter_clima():
-    cidade = "SaoPaulo"  # Substitua pela cidade desejada
+    cidade = "Natal" 
     url = f"http://api.openweathermap.org/data/2.5/weather?q={cidade}&units=metric"
     
     response = requests.get(url)
