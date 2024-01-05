@@ -1,27 +1,28 @@
 import telebot
 import requests
 
-TOKEN = ''
+TOKEN = '***'
 
 bot = telebot.TeleBot(TOKEN)
 
-# Função para obter informações sobre o clima usando a API OpenWeatherMap
 def obter_clima():
-    cidade = "Natal" 
-    url = f"http://api.openweathermap.org/data/2.5/weather?q={cidade}&units=metric"
-    
-    response = requests.get(url)
-    if response.status_code == 200:
-        clima = response.json()
-        temperatura = clima['main']['temp']
-        return f"A temperatura em {cidade} é de {temperatura}°C."
-    else:
-        return "Desculpe, não foi possível obter informações sobre o clima."
+  cidade = "Natal"
+  chave_api = "bd5e378503939ddaee76f12ad7a97608"  # Sua chave de API
+  url = f"http://api.openweathermap.org/data/2.5/weather?q={cidade}&appid={chave_api}&units=metric"
+
+  response = requests.get(url)
+  if response.status_code == 200:
+      clima = response.json()
+      temperatura = clima['main']['temp']
+      return f"A temperatura em {cidade} é de {temperatura}°C."
+  else:
+      return "Desculpe, não foi possível obter informações sobre o clima."
+
 
 # Função para obter o valor do dólar
 def obter_valor_dolar():
     url = "https://api.exchangerate-api.com/v4/latest/USD"
-    
+
     response = requests.get(url)
     if response.status_code == 200:
         valor = response.json()['rates']['BRL']
@@ -29,19 +30,33 @@ def obter_valor_dolar():
     else:
         return "Desculpe, não foi possível obter o valor do dólar."
 
-# Função para obter indicação de lançamento de filme
-def obter_lancamento_filme():
-    url = "https://api.themoviedb.org/3/movie/upcoming?api_key=API_KEY&language=pt-BR&page=1"
-    
-    response = requests.get(url)
-    if response.status_code == 200:
-        if response.json()['results']:
-            filme = response.json()['results'][0]['title']
-            return f"O próximo filme no cinema é: {filme}"
-        else:
-            return "Não há informações sobre novos filmes no momento."
+
+
+
+# Função Filmes
+bot_token = "6952533718:AAH5ya3iAzqP3OnEXL1lAu-5TF90_fRlM_I"
+api_key = '6275a571164083ab21055947b4aa8bd7'
+bot = telebot.TeleBot(bot_token)
+
+def obter_filmes_em_cartaz():
+    url_base = "https://api.themoviedb.org/3/movie/now_playing"
+    parametros = {
+      "api_key": api_key,
+"api_key": '6275a571164083ab21055947b4aa8bd7',
+        "language": "pt-BR",
+        "page": 1
+    }
+    resposta = requests.get(url_base, params=parametros)
+    if resposta.status_code == 200:
+        dados = resposta.json()
+        filmes = dados['results'][:10]  # Obtém os 10 primeiros filmes
+        resposta_texto = "Filmes em cartaz:\n"
+        for filme in filmes:
+            resposta_texto += f"{filme['title']} - {filme['overview']}\n\n"
+        return resposta_texto
     else:
-        return "Desculpe, não foi possível obter informações sobre filmes."
+        return "Erro ao acessar a API"
+        
 
 # Função para enviar uma mensagem do dia
 def enviar_mensagem_do_dia():
@@ -60,7 +75,7 @@ def dolar_command(message):
 
 @bot.message_handler(commands=["filme"])
 def filme_command(message):
-    resultado = obter_lancamento_filme()
+    resultado = obter_filmes_em_cartaz()
     bot.send_message(message.chat.id, resultado)
 
 @bot.message_handler(commands=["mensagem"])
@@ -91,4 +106,3 @@ def responder(message):
 
 # Inicia o bot
 bot.polling()
-
