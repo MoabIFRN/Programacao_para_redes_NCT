@@ -7,7 +7,7 @@ bot = telebot.TeleBot(TOKEN)
 
 def obter_clima():
   cidade = "Natal"
-  chave_api = "bd5e378503939ddaee76f12ad7a97608"  # Sua chave de API
+  chave_api = "bd5e378503939ddaee76f12ad7a97608"  # CHAVE API
   url = f"http://api.openweathermap.org/data/2.5/weather?q={cidade}&appid={chave_api}&units=metric"
 
   response = requests.get(url)
@@ -62,7 +62,7 @@ def obter_filmes_em_cartaz():
 def enviar_mensagem_do_dia():
     return "Aqui está a mensagem do dia: 'Aproveite cada momento da sua vida!'"
 
-# Handlers dos comandos do bot
+# Handlers dos comandos do bot - solução no youtube
 @bot.message_handler(commands=["clima"])
 def clima_command(message):
     resultado = obter_clima()
